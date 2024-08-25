@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class ManaBar : MonoBehaviour
 {
-    public Slider sliderMana;
+    public Slider slider;
 
     public void SetMaxMana(float mana)
     {
-        sliderMana.maxValue = mana;
-        sliderMana.value = mana;
+        slider.maxValue = mana;
+        slider.value = mana;
     }
 
     public void SetMana(float mana)
     {
-        sliderMana.value = mana;
+        slider.value = mana;
     }
 }
