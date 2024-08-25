@@ -47,11 +47,6 @@ public class Movimentacao : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
-
-        if (isGrounded())
-        {
-            canDash = true;
-        }
     }
 
     private bool isGrounded()
@@ -69,6 +64,12 @@ public class Movimentacao : MonoBehaviour
             transform.localScale = localScale;
         }  
     }
+
+
+    /*private void WallWalk()
+    {
+        
+    }*/
 
     private IEnumerator Dash()
     {
