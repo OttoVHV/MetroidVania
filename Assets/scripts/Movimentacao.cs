@@ -16,6 +16,12 @@ public class Movimentacao : MonoBehaviour
     private float dashingTime = 0.5f;
     private float dashingCooldown = 0.5f;
 
+    private float coyoteTime = 0.125f;
+    private float coyoteTimeCounter;
+
+    private float jumpBufferTime = 0.125f;
+    private float jumpBufferCounter;
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -23,24 +29,46 @@ public class Movimentacao : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        horizontal = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        Flip();
+
         if (isDashing)
         {
             return;
         }
-        
-        horizontal = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
-        Flip();
+        //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
+        if (isGrounded())
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
 
-        if(Input.GetButtonDown("Jump") && isGrounded())
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+
+            jumpBufferCounter = 0f;
         }
 
         if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+
+            coyoteTimeCounter = 0f;
         }
 
         if(Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
@@ -54,6 +82,7 @@ public class Movimentacao : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
+    //verifica pra qual lado está andando e se está "olhando" para o lado certo a sprite
     private void Flip()
     {
         if(isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
