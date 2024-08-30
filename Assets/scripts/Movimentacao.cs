@@ -23,6 +23,7 @@ public class Movimentacao : MonoBehaviour
     private float jumpBufferCounter;
 
     private bool wallWalk = false;
+    private float wallGravity = 10f;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -85,7 +86,8 @@ public class Movimentacao : MonoBehaviour
 
         if (wallWalk)
         {
-            rb.velocity = new Vector2(-5f, horizontal * speed);
+            rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
+              
         }
         else
         {
