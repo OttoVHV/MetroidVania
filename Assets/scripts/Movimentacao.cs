@@ -7,7 +7,7 @@ public class Movimentacao : MonoBehaviour
     private float horizontal;
     private float speed = 8f;
     private float accel;
-    private float jumpingPower = 16f;
+    private float jumpingPower = 50f;
     private bool isFacingRight = true;
 
     private bool canDash = true;
@@ -24,6 +24,7 @@ public class Movimentacao : MonoBehaviour
 
     private bool wallWalk = false;
     private float wallGravity = 10f;
+    public Player cMana;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -42,8 +43,15 @@ public class Movimentacao : MonoBehaviour
 
         if (wallWalk)
         {
-            rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
+            rb.velocity = new Vector2(wallGravity, horizontal * speed);
 
+            if (Input.GetButtonDown("Jump"))
+            {
+                rb.velocity = new Vector2(jumpingPower * 5f, horizontal * speed);
+
+                jumpBufferCounter = 0f;
+                print("work");
+            }
         }
         else
         {
@@ -88,10 +96,11 @@ public class Movimentacao : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.J) )
         {
-            WallWalk();
 
+                WallWalk();
+            
         }
     }
 
@@ -115,6 +124,18 @@ public class Movimentacao : MonoBehaviour
     {
         rb.gravityScale = 0f;
         wallWalk = true;
+
+        if (isFacingRight)
+        {
+            wallGravity = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+            jumpingPower = -16f;
+        }
+        else
+        {
+            wallGravity = -10f;
+            transform.rotation = Quaternion.Euler(0, 0, -90);
+        }
     }
 
     private IEnumerator Dash()

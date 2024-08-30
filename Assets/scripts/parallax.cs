@@ -24,7 +24,7 @@ public class parallax : MonoBehaviour
         transform.position = new Vector3(PosIni + dist, transform.position.y, transform.position.z);
         float movimento = cam.transform.position.x * (1 - Efeito);
 
-        Debug.Log(PosIni + tamanho);
+        //Debug.Log(PosIni + tamanho);
         if(movimento > PosIni + tamanho)
         {
             PosIni += tamanho;
