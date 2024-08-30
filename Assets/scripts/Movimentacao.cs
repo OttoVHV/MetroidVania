@@ -40,6 +40,16 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
+        if (wallWalk)
+        {
+            rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
+
+        }
+        else
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        }
+
         //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
         {
@@ -59,21 +69,21 @@ public class Movimentacao : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0f;
         }
 
-        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
 
             coyoteTimeCounter = 0f;
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
+        if (Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
         {
             StartCoroutine(Dash());
         }
@@ -82,16 +92,6 @@ public class Movimentacao : MonoBehaviour
         {
             WallWalk();
 
-        }
-
-        if (wallWalk)
-        {
-            rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
-              
-        }
-        else
-        {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
     }
 
@@ -103,13 +103,13 @@ public class Movimentacao : MonoBehaviour
     //verifica pra qual lado está andando e se está "olhando" para o lado certo a sprite
     private void Flip()
     {
-        if(isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
-        }  
+        }
     }
 
 
