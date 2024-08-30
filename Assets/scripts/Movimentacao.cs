@@ -22,8 +22,8 @@ public class Movimentacao : MonoBehaviour
     private float jumpBufferTime = 0.125f;
     private float jumpBufferCounter;
 
-    private bool wallWalk = false;
-    private float wallGravity = 10f;
+    /*private bool wallWalk = false;
+    private float wallGravity = 10f;*/
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -33,6 +33,7 @@ public class Movimentacao : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         Flip();
 
         if (isDashing)
@@ -40,6 +41,7 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
+<<<<<<< Updated upstream
         if (wallWalk)
         {
             rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
@@ -51,6 +53,9 @@ public class Movimentacao : MonoBehaviour
         }
 
         //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
+=======
+        //seta o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
+>>>>>>> Stashed changes
         if (isGrounded())
         {
             coyoteTimeCounter = coyoteTime;
@@ -88,11 +93,24 @@ public class Movimentacao : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        /*if (Input.GetKeyDown(KeyCode.J))
         {
             WallWalk();
 
         }
+<<<<<<< Updated upstream
+=======
+
+        if (wallWalk)
+        {
+            rb.velocity = new Vector2(wallGravity * -1f, horizontal * speed);
+              
+        }
+        else
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        }*/
+>>>>>>> Stashed changes
     }
 
     private bool isGrounded()
@@ -113,11 +131,11 @@ public class Movimentacao : MonoBehaviour
     }
 
 
-    private void WallWalk()
+    /*private void WallWalk()
     {
         rb.gravityScale = 0f;
         wallWalk = true;
-    }
+    }*/
 
     private IEnumerator Dash()
     {
