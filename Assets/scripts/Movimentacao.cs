@@ -6,8 +6,8 @@ public class Movimentacao : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    private float accel;
-    private float jumpingPower = 50f;
+    //private float accel;
+    private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
     private bool canDash = true;
@@ -16,21 +16,24 @@ public class Movimentacao : MonoBehaviour
     private float dashingTime = 0.5f;
     private float dashingCooldown = 0.5f;
 
-    private float coyoteTime = 0.125f;
+    private float coyoteTime = 0.1f;
     private float coyoteTimeCounter;
 
-    private float jumpBufferTime = 0.125f;
+    private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
     private bool wallWalk = false;
-    private float wallGravity = 10f;
-    public Player cMana;
+    private bool parede = false;
+    private bool lastState;
+    public Player player;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private CircleCollider2D wallCheck;
 
     // Update is called once per frame
+
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -41,21 +44,16 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
-        if (wallWalk)
+        if (!wallWalk)
         {
-            rb.velocity = new Vector2(wallGravity, horizontal * speed);
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                rb.velocity = new Vector2(jumpingPower * 5f, horizontal * speed);
-
-                jumpBufferCounter = 0f;
-                print("work");
-            }
+            rb.gravityScale = 4f;
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else
         {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
         }
 
         //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
@@ -96,11 +94,37 @@ public class Movimentacao : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyDown(KeyCode.J) )
+        if (Input.GetKeyDown(KeyCode.J) && parede == true && player.currentMana > 0f)
         {
+            wallWalk = true;
+        }else if(Input.GetKeyDown(KeyCode.J))
+        {
+            wallWalk = false;
+        }
 
-                WallWalk();
-            
+        if (player.currentMana <= 0f)
+        {
+            wallWalk = false;
+        }
+
+        print(wallWalk);
+    }
+
+    private void OnTriggerStay2D(Collider2D wallCheck)
+    {
+        if (wallCheck.tag == "Parede")
+        {
+            parede = true;
+            Debug.Log("ANDE");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D wallCheck)
+    {
+        if (wallCheck.tag == "Parede")
+        {
+            parede = false;
+            Debug.Log("ANDE");
         }
     }
 
@@ -120,7 +144,7 @@ public class Movimentacao : MonoBehaviour
             transform.localScale = localScale;
         }
     }
-    private void WallWalk()
+    /*private void WallWalk()
     {
         rb.gravityScale = 0f;
         wallWalk = true;
@@ -136,7 +160,7 @@ public class Movimentacao : MonoBehaviour
             wallGravity = -10f;
             transform.rotation = Quaternion.Euler(0, 0, -90);
         }
-    }
+    }*/
 
     private IEnumerator Dash()
     {
