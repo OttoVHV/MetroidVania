@@ -6,7 +6,7 @@ public class Movimentacao : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    private float accel;
+    //private float accel;
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
@@ -16,19 +16,24 @@ public class Movimentacao : MonoBehaviour
     private float dashingTime = 0.5f;
     private float dashingCooldown = 0.5f;
 
-    private float coyoteTime = 0.125f;
+    private float coyoteTime = 0.1f;
     private float coyoteTimeCounter;
 
-    private float jumpBufferTime = 0.125f;
+    private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
     private bool wallWalk = false;
+    private bool parede = false;
+    private bool lastState;
+    public Player player;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private CircleCollider2D wallCheck;
 
     // Update is called once per frame
+
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -37,6 +42,18 @@ public class Movimentacao : MonoBehaviour
         if (isDashing)
         {
             return;
+        }
+
+        if (!wallWalk)
+        {
+            rb.gravityScale = 4f;
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
         }
 
         //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
@@ -58,38 +75,56 @@ public class Movimentacao : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0f;
         }
 
-        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
 
             coyoteTimeCounter = 0f;
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
+        if (Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
         {
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.J) && parede == true && player.currentMana > 0f)
         {
-            WallWalk();
-
+            wallWalk = true;
+        }else if(Input.GetKeyDown(KeyCode.J))
+        {
+            wallWalk = false;
         }
 
-        if (wallWalk)
+        if (player.currentMana <= 0f)
         {
-            rb.velocity = new Vector2(-5f, horizontal * speed);
+            wallWalk = false;
         }
-        else
+
+        print(wallWalk);
+    }
+
+    private void OnTriggerStay2D(Collider2D wallCheck)
+    {
+        if (wallCheck.tag == "Parede")
         {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            parede = true;
+            Debug.Log("ANDE");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D wallCheck)
+    {
+        if (wallCheck.tag == "Parede")
+        {
+            parede = false;
+            Debug.Log("ANDE");
         }
     }
 
@@ -101,21 +136,31 @@ public class Movimentacao : MonoBehaviour
     //verifica pra qual lado está andando e se está "olhando" para o lado certo a sprite
     private void Flip()
     {
-        if(isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
-        }  
+        }
     }
-
-
-    private void WallWalk()
+    /*private void WallWalk()
     {
         rb.gravityScale = 0f;
         wallWalk = true;
-    }
+
+        if (isFacingRight)
+        {
+            wallGravity = 10f;
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+            jumpingPower = -16f;
+        }
+        else
+        {
+            wallGravity = -10f;
+            transform.rotation = Quaternion.Euler(0, 0, -90);
+        }
+    }*/
 
     private IEnumerator Dash()
     {
