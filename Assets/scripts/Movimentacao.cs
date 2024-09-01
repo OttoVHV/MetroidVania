@@ -44,13 +44,13 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
-        if (!wallWalk)
+        if (!wallWalk && !parede)
         {
             rb.gravityScale = 4f;
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        else
+        else if(wallWalk && parede)
         {
             rb.gravityScale = 0f;
             rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
@@ -75,11 +75,14 @@ public class Movimentacao : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f && wallWalk == false)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0f;
+        } else if(Input.GetButtonUp("Jump") && wallWalk == true)
+        {
+            rb.velocity = new Vector2(jumpingPower, rb.velocity.y);
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
