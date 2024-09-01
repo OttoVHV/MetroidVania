@@ -17,10 +17,12 @@ public class Inimigo : MonoBehaviour
     [SerializeField]
     private float speed;
     private Rigidbody2D rig;
+    public LayerMask ground;
 
     
     GameObject player;
     bool perseguindo;
+    public bool isGrounded;
 
     void Start()
     {
@@ -58,6 +60,8 @@ public class Inimigo : MonoBehaviour
        {
         PontoPerseguir = player.transform.position;
        }
+
+       isGrounded = Physics2D.OverlapBox(transform.position, new Vector3(0, 1, 0), 0f,ground);
     }
 
     //mostrar as setas
@@ -80,7 +84,7 @@ public class Inimigo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "Ground")
+        if(col.tag == "Ground" && isGrounded)
         {
             rig.AddForce(new Vector2(rig.velocity.x, 300f), ForceMode2D.Force);
             Debug.Log("Pula");
