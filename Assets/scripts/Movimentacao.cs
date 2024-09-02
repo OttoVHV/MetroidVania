@@ -24,7 +24,7 @@ public class Movimentacao : MonoBehaviour
 
     private bool wallWalk = false;
     private bool parede = false;
-    private bool lastState;
+    private bool andandoParede = false;
     public Player player;
 
     [SerializeField] private Rigidbody2D rb;
@@ -44,7 +44,7 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
-        if (!wallWalk && !parede)
+        /*if (!wallWalk)
         {
             rb.gravityScale = 4f;
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
@@ -54,7 +54,26 @@ public class Movimentacao : MonoBehaviour
         {
             rb.gravityScale = 0f;
             rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
+        }*/
+
+        if (wallWalk && parede)
+        {
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
+            andandoParede = true;
+            print(wallWalk);
         }
+        else
+        {
+            rb.gravityScale = 4f;
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            wallWalk = false;
+            andandoParede = false;
+            print(wallWalk);
+        }
+
+        
 
         //set o contador do coyote time enquanto estiver no ch�o, caso contr�rio vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
@@ -100,14 +119,12 @@ public class Movimentacao : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.J) && parede == true && player.currentMana > 0f)
         {
             wallWalk = true;
-        }else if(Input.GetKeyDown(KeyCode.J))
-        {
-            wallWalk = false;
         }
-
-        if (player.currentMana <= 0f)
+        
+        if(((Input.GetKeyDown(KeyCode.J) && andandoParede)) || player.currentMana <= 0f)
         {
             wallWalk = false;
+            andandoParede = false;
         }
     }
 
@@ -116,7 +133,7 @@ public class Movimentacao : MonoBehaviour
         if (wallCheck.tag == "Parede")
         {
             parede = true;
-            Debug.Log("ANDE");
+            //Debug.Log("Parede check");
         }
     }
 
@@ -125,7 +142,7 @@ public class Movimentacao : MonoBehaviour
         if (wallCheck.tag == "Parede")
         {
             parede = false;
-            Debug.Log("ANDE");
+            //Debug.Log("Parede check 2");
         }
     }
 
@@ -134,7 +151,7 @@ public class Movimentacao : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
-    //verifica pra qual lado est� andando e se est� "olhando" para o lado certo a sprite
+    //verifica pra qual lado est� andando e se esta "olhando" para o lado certo a sprite
     private void Flip()
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
@@ -145,23 +162,6 @@ public class Movimentacao : MonoBehaviour
             transform.localScale = localScale;
         }
     }
-    /*private void WallWalk()
-    {
-        rb.gravityScale = 0f;
-        wallWalk = true;
-
-        if (isFacingRight)
-        {
-            wallGravity = 10f;
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-            jumpingPower = -16f;
-        }
-        else
-        {
-            wallGravity = -10f;
-            transform.rotation = Quaternion.Euler(0, 0, -90);
-        }
-    }*/
 
     private IEnumerator Dash()
     {
