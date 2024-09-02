@@ -17,28 +17,39 @@ public class Inimigo : MonoBehaviour
     [SerializeField]
     private float speed;
     private Rigidbody2D rig;
-    public LayerMask ground;
+    private BoxCollider2D bx;
 
     
+    RaycastHit2D raio;
     GameObject player;
     bool perseguindo;
-    public bool isGrounded;
+    bool isGrounded;
+    bool Buraco = false;
 
     void Start()
     {
         PontoPerseguir = ponto1;
         rig = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Player");
+
+        bx = gameObject.AddComponent<BoxCollider2D>();
+        bx.isTrigger = true;
     }
 
     void Update()
     {
         //esquerda ou direita
-        if(transform.position.x < PontoPerseguir.x)
+        if(transform.position.x < PontoPerseguir.x && !Buraco)
         {
             rig.velocity = new Vector2 (speed, rig.velocity.y);
-        } else if(transform.position.x > PontoPerseguir.x){
+            bx.offset = new Vector2(1, 0.05f);
+            raio = Physics2D.Raycast(new Vector2(transform.position.x + 1, transform.position.y), new Vector2(0,-2));
+            Debug.DrawRay(new Vector2(transform.position.x + 1, transform.position.y), new Vector2(0,-2));
+        } else if(transform.position.x > PontoPerseguir.x && !Buraco){
             rig.velocity = new Vector2 (-speed, rig.velocity.y);
+            bx.offset = new Vector2(-1, 0.05f);
+            raio = Physics2D.Raycast(new Vector2(transform.position.x - 1, transform.position.y), new Vector2(0,-2));
+            Debug.DrawRay(new Vector2(transform.position.x -1, transform.position.y), new Vector2(0,-2));
         }
 
         //mudar de ponto da patrulha
@@ -61,7 +72,16 @@ public class Inimigo : MonoBehaviour
         PontoPerseguir = player.transform.position;
        }
 
-       isGrounded = Physics2D.OverlapBox(transform.position, new Vector3(0, 1, 0), 0f,ground);
+       if(raio.collider == null)
+       {
+        Buraco = true;
+        rig.velocity = new Vector2(0, rig.velocity.y);
+       } else {
+        Buraco = false;
+       }
+       Debug.Log(raio.collider);
+
+       isGrounded = Physics2D.OverlapBox(transform.position, new Vector3(0, 1, 0), 0f, 7);
     }
 
     //mostrar as setas
