@@ -56,7 +56,7 @@ public class Movimentacao : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
         }
 
-        //set o contador do coyote time enquanto estiver no chão, caso contrário vai diminuindo do contador enquanto estiver no ar
+        //set o contador do coyote time enquanto estiver no chï¿½o, caso contrï¿½rio vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
         {
             coyoteTimeCounter = coyoteTime;
@@ -106,8 +106,6 @@ public class Movimentacao : MonoBehaviour
         {
             wallWalk = false;
         }
-
-        print(wallWalk);
     }
 
     private void OnTriggerStay2D(Collider2D wallCheck)
@@ -133,7 +131,7 @@ public class Movimentacao : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
-    //verifica pra qual lado está andando e se está "olhando" para o lado certo a sprite
+    //verifica pra qual lado estï¿½ andando e se estï¿½ "olhando" para o lado certo a sprite
     private void Flip()
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
