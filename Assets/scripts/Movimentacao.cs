@@ -113,7 +113,6 @@ public class Movimentacao : MonoBehaviour
         if (wallCheck.tag == "Parede")
         {
             parede = true;
-            Debug.Log("ANDE");
         }
     }
 
@@ -122,7 +121,6 @@ public class Movimentacao : MonoBehaviour
         if (wallCheck.tag == "Parede")
         {
             parede = false;
-            Debug.Log("ANDE");
         }
     }
 
