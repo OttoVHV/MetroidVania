@@ -161,6 +161,8 @@ MonoBehaviour:
   textD: {fileID: 2800000, guid: 4bdc34db1c1b5424883ad4a77612f760, type: 3}
   textE: {fileID: 2800000, guid: 9500bbe2454181f488a5a18e586ddf04, type: 3}
   speed: 2
+  n: 0
+  count: 0
 --- !u!61 &16464337
 BoxCollider2D:
   m_ObjectHideFlags: 0

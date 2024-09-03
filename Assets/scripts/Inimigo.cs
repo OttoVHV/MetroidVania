@@ -22,9 +22,9 @@ public class Inimigo : MonoBehaviour
     
     RaycastHit2D raio;
     GameObject player;
-    bool perseguindo;
-    bool isGrounded;
-    bool Buraco = false;
+    public bool perseguindo, isGrounded, criado = false, voltando = false;
+    public float n, count = 0;
+
 
     void Start()
     {
@@ -38,18 +38,18 @@ public class Inimigo : MonoBehaviour
 
     void Update()
     {
+        raio = Physics2D.Raycast(new Vector2(transform.position.x + n, transform.position.y), new Vector2(0,-2));
+        Debug.DrawRay(new Vector2(transform.position.x + n, transform.position.y), new Vector2(0,-2));
         //esquerda ou direita
-        if(transform.position.x < PontoPerseguir.x && !Buraco)
+        if(transform.position.x < PontoPerseguir.x)
         {
             rig.velocity = new Vector2 (speed, rig.velocity.y);
             bx.offset = new Vector2(1, 0.05f);
-            raio = Physics2D.Raycast(new Vector2(transform.position.x + 1, transform.position.y), new Vector2(0,-2));
-            Debug.DrawRay(new Vector2(transform.position.x + 1, transform.position.y), new Vector2(0,-2));
-        } else if(transform.position.x > PontoPerseguir.x && !Buraco){
+            n = 1;
+        } else if(transform.position.x > PontoPerseguir.x){
             rig.velocity = new Vector2 (-speed, rig.velocity.y);
             bx.offset = new Vector2(-1, 0.05f);
-            raio = Physics2D.Raycast(new Vector2(transform.position.x - 1, transform.position.y), new Vector2(0,-2));
-            Debug.DrawRay(new Vector2(transform.position.x -1, transform.position.y), new Vector2(0,-2));
+            n = -1;
         }
 
         //mudar de ponto da patrulha
@@ -74,14 +74,25 @@ public class Inimigo : MonoBehaviour
 
        if(raio.collider == null)
        {
-        Buraco = true;
+        count += 1 * Time.deltaTime;
         rig.velocity = new Vector2(0, rig.velocity.y);
+            if(!criado)
+            {
+             GameObject ponto = new GameObject("ponto");
+             ponto.transform.position = new Vector3(transform.position.x + bx.offset.x, transform.position.y + bx.offset.y - 2, 0);
+             criado = true;
+            }
+        if(count > 5)
+        {
+            perseguindo = false;
+            criado = false;
+            PontoPerseguir = ponto1;
+            Destroy(GameObject.Find("ponto"));
+        }
        } else {
-        Buraco = false;
+        count = 0;
        }
-       Debug.Log(raio.collider);
-
-       isGrounded = Physics2D.OverlapBox(transform.position, new Vector3(0, 1, 0), 0f, 7);
+       isGrounded = Physics2D.OverlapBox(transform.position, new Vector3(0, 1, 0), 0f, LayerMask.GetMask("Ground"));
     }
 
     //mostrar as setas
@@ -107,7 +118,6 @@ public class Inimigo : MonoBehaviour
         if(col.tag == "Ground" && isGrounded)
         {
             rig.AddForce(new Vector2(rig.velocity.x, 300f), ForceMode2D.Force);
-            Debug.Log("Pula");
         }
     }
 }
