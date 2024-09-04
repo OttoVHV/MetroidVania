@@ -6,9 +6,8 @@ public class Movimentacao : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    //private float accel;
     private float jumpingPower = 16f;
-    private bool isFacingRight = true;
+    private float invertedGravity = 4f;
 
     private bool canDash = true;
     private float dashPower = 3f;
@@ -22,6 +21,7 @@ public class Movimentacao : MonoBehaviour
     private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
+    private bool isFacingRight = true;
     private bool wallWalk = false;
     private bool parede = false;
     private bool andandoParede = false;
@@ -44,38 +44,25 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
-        /*if (!wallWalk)
-        {
-            rb.gravityScale = 4f;
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-        else if(wallWalk && parede)
+        if (wallWalk)
         {
             rb.gravityScale = 0f;
-            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
-        }*/
-
-        if (wallWalk && parede)
-        {
-            rb.gravityScale = 0f;
-            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed);
+            transform.rotation = Quaternion.Euler(0, 0, 270);
+            rb.velocity = new Vector2(invertedGravity * -1f, horizontal * speed * -1f);
+            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
             andandoParede = true;
-            print(wallWalk);
+            print(isGrounded());
         }
         else
         {
             rb.gravityScale = 4f;
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            wallWalk = false;
             andandoParede = false;
-            print(wallWalk);
+            print(isGrounded());
         }
 
-        
-
-        //set o contador do coyote time enquanto estiver no ch�o, caso contr�rio vai diminuindo do contador enquanto estiver no ar
+        //set o contador do coyote time enquanto estiver no chao, caso contrario vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
         {
             coyoteTimeCounter = coyoteTime;
@@ -99,14 +86,25 @@ public class Movimentacao : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0f;
-        } else if(Input.GetButtonUp("Jump") && wallWalk == true)
+        }
+        
+        if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f && wallWalk == true)
         {
             rb.velocity = new Vector2(jumpingPower, rb.velocity.y);
+
+            //jumpBufferCounter = 0f;
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+
+            coyoteTimeCounter = 0f;
+        }
+
+        if(Input.GetButtonUp("Jump") && rb.velocity.x > 0f && wallWalk == true)
+        {
+            rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y);
 
             coyoteTimeCounter = 0f;
         }
