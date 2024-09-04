@@ -6,6 +6,7 @@ public class Movimentacao : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
+    [SerializeField] private float accel;
     private float jumpingPower = 16f;
     private float invertedGravity = 4f;
 
@@ -32,8 +33,32 @@ public class Movimentacao : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private CircleCollider2D wallCheck;
 
-    // Update is called once per frame
 
+    private void FixedUpdate()
+    {
+        if (wallWalk)
+        {
+            rb.gravityScale = 0f;
+            transform.rotation = Quaternion.Euler(0, 0, 270);
+            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
+            andandoParede = true;
+            print(rb.velocity);
+            
+            if (!isGrounded())
+            {
+                rb.velocity = new Vector2((invertedGravity + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
+            }
+        }
+        else
+        {
+            rb.gravityScale = 4f;
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            andandoParede = false;
+            print(rb.velocity);
+        }
+    }
+    // Update is called once per frame
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -44,14 +69,13 @@ public class Movimentacao : MonoBehaviour
             return;
         }
 
-        if (wallWalk)
+        /*if (wallWalk)
         {
             rb.gravityScale = 0f;
             transform.rotation = Quaternion.Euler(0, 0, 270);
-            rb.velocity = new Vector2(invertedGravity * -1f, horizontal * speed * -1f);
-            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
+            rb.velocity = new Vector2((rb.velocity.x + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
             andandoParede = true;
-            print(isGrounded());
+            print(rb.velocity);
         }
         else
         {
@@ -59,8 +83,8 @@ public class Movimentacao : MonoBehaviour
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
             transform.rotation = Quaternion.Euler(0, 0, 0);
             andandoParede = false;
-            print(isGrounded());
-        }
+            print(rb.velocity);
+        }*/
 
         //set o contador do coyote time enquanto estiver no chao, caso contrario vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
@@ -90,7 +114,7 @@ public class Movimentacao : MonoBehaviour
         
         if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f && wallWalk == true)
         {
-            rb.velocity = new Vector2(jumpingPower, rb.velocity.y);
+            rb.velocity = new Vector2(jumpingPower * 2f, rb.velocity.y);
 
             //jumpBufferCounter = 0f;
         }
