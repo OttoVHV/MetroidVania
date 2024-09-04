@@ -836,6 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39ffb307c7d2db499b321c331b2ce91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  accel: 10
   player: {fileID: 233101836}
   rb: {fileID: 233101831}
   groundCheck: {fileID: 1542833124}
