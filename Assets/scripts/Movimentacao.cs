@@ -36,6 +36,19 @@ public class Movimentacao : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        horizontal = Input.GetAxisRaw("Horizontal");
+        Flip();
+
+        if (isDashing)
+        {
+            return;
+        }
+
         if (wallWalk)
         {
             rb.gravityScale = 0f;
@@ -43,7 +56,7 @@ public class Movimentacao : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
             andandoParede = true;
             print(rb.velocity);
-            
+
             if (!isGrounded())
             {
                 rb.velocity = new Vector2((invertedGravity + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
@@ -56,17 +69,6 @@ public class Movimentacao : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
             andandoParede = false;
             print(rb.velocity);
-        }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        Flip();
-
-        if (isDashing)
-        {
-            return;
         }
 
         /*if (wallWalk)
