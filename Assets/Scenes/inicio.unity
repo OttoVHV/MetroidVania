@@ -887,7 +887,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &233101832
 SpriteRenderer:
@@ -969,7 +969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39ffb307c7d2db499b321c331b2ce91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accel: 10
+  accel: 20
   player: {fileID: 233101836}
   rb: {fileID: 233101831}
   groundCheck: {fileID: 1542833124}

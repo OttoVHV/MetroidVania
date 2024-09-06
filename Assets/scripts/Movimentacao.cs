@@ -8,7 +8,7 @@ public class Movimentacao : MonoBehaviour
     private float speed = 8f;
     [SerializeField] private float accel;
     private float jumpingPower = 16f;
-    private float invertedGravity = 4f;
+    private float invertedGravity = 10f;
 
     private bool canDash = true;
     private float dashPower = 3f;
@@ -59,7 +59,8 @@ public class Movimentacao : MonoBehaviour
 
             if (!isGrounded())
             {
-                rb.velocity = new Vector2((invertedGravity + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
+                //rb.velocity = new Vector2((invertedGravity + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
+                rb.AddForce(new Vector2(((invertedGravity * 3.5f) + accel * Time.deltaTime) * -1f, 0));
             }
         }
         else
@@ -116,7 +117,8 @@ public class Movimentacao : MonoBehaviour
         
         if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f && wallWalk == true)
         {
-            rb.velocity = new Vector2(jumpingPower * 2f, rb.velocity.y);
+            rb.velocity = new Vector2(jumpingPower, rb.velocity.y);
+            //rb.AddForce(new Vector2(jumpingPower, 0), ForceMode2D.Impulse);
 
             //jumpBufferCounter = 0f;
         }
