@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Movimentacao : MonoBehaviour
 {
+    private Animator anim;
     private float horizontal;
     private float speed = 8f;
     [SerializeField] private float accel;
@@ -34,14 +35,15 @@ public class Movimentacao : MonoBehaviour
     [SerializeField] private CircleCollider2D wallCheck;
 
 
-    private void FixedUpdate()
+    private void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
     // Update is called once per frame
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
+        anim.SetFloat("andar", horizontal);
         Flip();
 
         if (isDashing)
