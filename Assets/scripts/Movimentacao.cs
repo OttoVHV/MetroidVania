@@ -6,13 +6,13 @@ public class Movimentacao : MonoBehaviour
 {
     private Animator anim;
     private float horizontal;
-    private float speed = 8f;
+    private float speed = 10f;
     [SerializeField] private float accel;
     private float jumpingPower = 16f;
     private float invertedGravity = 10f;
 
     private bool canDash = true;
-    private float dashPower = 3f;
+    private float dashPower = 8f;
     private bool isDashing;
     private float dashingTime = 0.5f;
     private float dashingCooldown = 0.5f;
