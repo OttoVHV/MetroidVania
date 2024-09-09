@@ -27,6 +27,7 @@ public class Movimentacao : MonoBehaviour
     private bool wallWalk = false;
     private bool parede = false;
     private bool andandoParede = false;
+    private bool RightWall = false;
     public Player player;
 
     [SerializeField] private Rigidbody2D rb;
@@ -54,15 +55,26 @@ public class Movimentacao : MonoBehaviour
         if (wallWalk)
         {
             rb.gravityScale = 0f;
-            transform.rotation = Quaternion.Euler(0, 0, 270);
-            rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
             andandoParede = true;
-            print(rb.velocity);
-
-            if (!isGrounded())
+            
+            if (RightWall)
             {
-                //rb.velocity = new Vector2((invertedGravity + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
-                rb.AddForce(new Vector2(((invertedGravity * 3.5f) + accel * Time.deltaTime) * -1f, 0));
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+                rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * 1f);
+
+                if (!isGrounded())
+                {
+                    rb.AddForce(new Vector2(((invertedGravity * 3.5f) + accel * Time.deltaTime) , 0));
+                }
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+                rb.velocity = new Vector2(rb.velocity.x, horizontal * speed * -1f);
+                if (!isGrounded())
+                {
+                    rb.AddForce(new Vector2(((invertedGravity * 3.5f) + accel * Time.deltaTime) * -1f, 0));
+                }
             }
         }
         else
@@ -71,25 +83,7 @@ public class Movimentacao : MonoBehaviour
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
             transform.rotation = Quaternion.Euler(0, 0, 0);
             andandoParede = false;
-            print(rb.velocity);
         }
-
-        /*if (wallWalk)
-        {
-            rb.gravityScale = 0f;
-            transform.rotation = Quaternion.Euler(0, 0, 270);
-            rb.velocity = new Vector2((rb.velocity.x + accel * Time.deltaTime) * -1f, horizontal * speed * -1f);
-            andandoParede = true;
-            print(rb.velocity);
-        }
-        else
-        {
-            rb.gravityScale = 4f;
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            andandoParede = false;
-            print(rb.velocity);
-        }*/
 
         //set o contador do coyote time enquanto estiver no chao, caso contrario vai diminuindo do contador enquanto estiver no ar
         if (isGrounded())
@@ -119,7 +113,15 @@ public class Movimentacao : MonoBehaviour
         
         if(jumpBufferCounter > 0f && coyoteTimeCounter > 0f && wallWalk == true)
         {
-            rb.velocity = new Vector2(jumpingPower, rb.velocity.y);
+            if (RightWall)
+            {
+                rb.velocity = new Vector2(jumpingPower * -1.5f, rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = new Vector2(jumpingPower * 1.5f, rb.velocity.y);
+            }
+
             //rb.AddForce(new Vector2(jumpingPower, 0), ForceMode2D.Impulse);
 
             //jumpBufferCounter = 0f;
@@ -139,7 +141,7 @@ public class Movimentacao : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && canDash == true)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash == true)
         {
             StartCoroutine(Dash());
         }
@@ -161,12 +163,24 @@ public class Movimentacao : MonoBehaviour
         if (wallCheck.tag == "Parede")
         {
             parede = true;
+            RightWall = false;
+        }
+        
+        if (wallCheck.tag == "ParedeRight")
+        {
+            parede = true;
+            RightWall = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D wallCheck)
     {
         if (wallCheck.tag == "Parede")
+        {
+            parede = false;
+        }
+        
+        if (wallCheck.tag == "ParedeRight")
         {
             parede = false;
         }
@@ -195,7 +209,37 @@ public class Movimentacao : MonoBehaviour
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(transform.localScale.x * dashPower, 0f);
+        
+        if (wallWalk)
+        {
+            if (RightWall)
+            {
+                if (isFacingRight)
+                {
+                    rb.velocity = new Vector2(0f, transform.localScale.y * dashPower);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(0f, transform.localScale.y * dashPower * -1);
+                }
+            }
+            else
+            {
+                if (isFacingRight)
+                {
+                    rb.velocity = new Vector2(0f, transform.localScale.y * dashPower * -1f);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(0f, transform.localScale.y * dashPower);
+                }
+            }
+        }
+        else
+        {
+            rb.velocity = new Vector2(transform.localScale.x * dashPower, 0f);
+        }
+
         yield return new WaitForSeconds(dashingTime);
         rb.gravityScale = originalGravity;
         isDashing = false;
