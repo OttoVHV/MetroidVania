@@ -35,6 +35,11 @@ public class Player : MonoBehaviour
         {
             ConsumeMana(20);
         }
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     public void TakeDamage(float damage)
@@ -49,5 +54,13 @@ public class Player : MonoBehaviour
         currentMana -= mana;
 
         manaBar.SetMana(currentMana);
+    }
+
+    private void Die()
+    {
+        //disable player's control
+        //play death animation
+        //destroy game object
+        //load last savepoint
     }
 }

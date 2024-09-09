@@ -40,12 +40,14 @@ public class MenuPause : MonoBehaviour
 
     public void LoadMenu()
     {
+        //save player's current room and coordinates
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
 
     public void QuitGame()
     {
+        //save player's current room and coordinates
         Application.Quit();
     }
 }
