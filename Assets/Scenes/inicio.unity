@@ -9012,7 +9012,7 @@ GameObject:
   - component: {fileID: 523850207}
   - component: {fileID: 523850212}
   m_Layer: 0
-  m_Name: Triggers
+  m_Name: LoadSceneTriggers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
