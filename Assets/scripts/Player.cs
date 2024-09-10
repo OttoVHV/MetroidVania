@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     public float maxMana = 100f;
     public float currentMana;
 
+    public int currentScene;
+    public bool dashUnlocked;
+    public bool wallWalkUnlocked;
+
     public HealthBar healthBar;
     public ManaBar manaBar;
 
@@ -54,6 +58,20 @@ public class Player : MonoBehaviour
         currentMana -= mana;
 
         manaBar.SetMana(currentMana);
+    }
+
+    public void Savegame()
+    {
+        SaveSystem.SaveGame(this);
+    }
+
+    public void LoadGame()
+    {
+        GameData data = SaveSystem.loadGame();
+
+        currentScene = data.currentScene;
+        dashUnlocked = data.dashUnlocked;
+        wallWalkUnlocked = data.wallWalkUnlocked;
     }
 
     private void Die()
