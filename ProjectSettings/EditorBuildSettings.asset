@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/sala02.unity
     guid: 1146ed361bd90ef44887ccfa28cddb86
+  - enabled: 1
+    path: Assets/Scenes/SaveRoom.unity
+    guid: 01bbbf3f2d3528344973dc65fd522953
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: a35b96e190e4d1049a48c40623473dd0, type: 2}

@@ -317,6 +317,9 @@ MonoBehaviour:
   currentHealth: 0
   maxMana: 100
   currentMana: 0
+  currentScene: 0
+  dashUnlocked: 0
+  wallWalkUnlocked: 0
   healthBar: {fileID: 0}
   manaBar: {fileID: 0}
 --- !u!58 &369070728191843242

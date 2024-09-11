@@ -10,12 +10,13 @@ public class Player : MonoBehaviour
     public float maxMana = 100f;
     public float currentMana;
 
-    public int currentScene;
+    public int lastSaveroom = 3;
     public bool dashUnlocked;
     public bool wallWalkUnlocked;
 
     public HealthBar healthBar;
     public ManaBar manaBar;
+    public LevelLoader levelLoader;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +45,12 @@ public class Player : MonoBehaviour
         {
             Die();
         }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            Savegame();
+            print("will it save?");
+        }
     }
 
     public void TakeDamage(float damage)
@@ -63,15 +70,19 @@ public class Player : MonoBehaviour
     public void Savegame()
     {
         SaveSystem.SaveGame(this);
+        print("GAME SAVED");
     }
 
     public void LoadGame()
     {
         GameData data = SaveSystem.loadGame();
 
-        currentScene = data.currentScene;
+        lastSaveroom = data.lastSaveroom;
         dashUnlocked = data.dashUnlocked;
         wallWalkUnlocked = data.wallWalkUnlocked;
+        
+        levelLoader.LoadScene(lastSaveroom);
+        print("GAME LOADED");
     }
 
     private void Die()
@@ -80,5 +91,8 @@ public class Player : MonoBehaviour
         //play death animation
         //destroy game object
         //load last savepoint
+        LoadGame();
+        currentHealth = maxHealth;
+        currentMana = maxMana;
     }
 }
