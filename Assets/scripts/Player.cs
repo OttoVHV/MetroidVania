@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public float maxMana = 100f;
     public float currentMana;
 
-    public int lastSaveroom = 3;
+    public int lastSaveroom;
     public bool dashUnlocked;
     public bool wallWalkUnlocked;
 
@@ -45,12 +45,6 @@ public class Player : MonoBehaviour
         {
             Die();
         }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Savegame();
-            print("will it save?");
-        }
     }
 
     public void TakeDamage(float damage)
@@ -67,12 +61,11 @@ public class Player : MonoBehaviour
         manaBar.SetMana(currentMana);
     }
 
-    public void Savegame()
+    public void SetRoom(int room)
     {
-        SaveSystem.SaveGame(this);
-        print("GAME SAVED");
+        lastSaveroom = room;
     }
-
+    
     public void LoadGame()
     {
         GameData data = SaveSystem.loadGame();
@@ -80,9 +73,8 @@ public class Player : MonoBehaviour
         lastSaveroom = data.lastSaveroom;
         dashUnlocked = data.dashUnlocked;
         wallWalkUnlocked = data.wallWalkUnlocked;
-        
+
         levelLoader.LoadScene(lastSaveroom);
-        print("GAME LOADED");
     }
 
     private void Die()
