@@ -48,19 +48,20 @@ public class Inimigo : MonoBehaviour
         if(transform.position.x < PontoPerseguir.x)
         {
             rig.velocity = new Vector2 (speed, rig.velocity.y);
-            bx.offset = new Vector2(0.45f, 0.05f);
+            bx.offset = new Vector2(0.45f, -0.19f);
             n = 1;
         } else if(transform.position.x > PontoPerseguir.x){
             rig.velocity = new Vector2 (-speed, rig.velocity.y);
-            bx.offset = new Vector2(-0.45f, 0.05f);
+            bx.offset = new Vector2(-0.45f, -0.19f);
             n = -1;
         }
 
+        Debug.Log(Vector2.Distance(transform.position, PontoPerseguir));
         //mudar de ponto da patrulha
-        if(Vector2.Distance(transform.position, PontoPerseguir) < 0.6f && PontoPerseguir == ponto1)
+        if(Vector2.Distance(transform.position, PontoPerseguir) < 1.17f && PontoPerseguir == ponto1)
         {
             PontoPerseguir = ponto2;
-        } else if(Vector2.Distance(transform.position, PontoPerseguir) < 0.6f && PontoPerseguir == ponto2)
+        } else if(Vector2.Distance(transform.position, PontoPerseguir) < 1.17f && PontoPerseguir == ponto2)
         {
             PontoPerseguir = ponto1;
         }
