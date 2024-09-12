@@ -5,13 +5,13 @@ using UnityEngine;
 public class Savepoint : MonoBehaviour
 {
     public Player player;
-    private static int room = 3;
+    public SceneTransitionTrigger stt;
 
     public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            ShowButton();
+            Savegame();
         }
     }
 
@@ -23,17 +23,9 @@ public class Savepoint : MonoBehaviour
         }
     }
 
-    public void ShowButton()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Savegame();
-        }
-    }
-
     public void Savegame()
     {
-        player.SetRoom(room);
+        player.SetRoom(stt.nextSceneOrCurrentScene);
         SaveSystem.SaveGame(player);
         print("GAME SAVED");
     }
