@@ -18,6 +18,7 @@ public class Inimigo : MonoBehaviour
     private float speed;
     private Rigidbody2D rig;
     private BoxCollider2D bx;
+    private Animator anim;
 
     
     RaycastHit2D raio;
@@ -30,25 +31,28 @@ public class Inimigo : MonoBehaviour
     {
         PontoPerseguir = ponto1;
         rig = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         player = GameObject.Find("Player");
 
         bx = gameObject.AddComponent<BoxCollider2D>();
+        bx.size = new Vector2(0.45f, 0.30f);
         bx.isTrigger = true;
     }
 
     void Update()
     {
+        //anim.SetFloat("velo", rig.velocity.x);
         raio = Physics2D.Raycast(new Vector2(transform.position.x + n, transform.position.y), new Vector2(0,-2));
         Debug.DrawRay(new Vector2(transform.position.x + n, transform.position.y), new Vector2(0,-2));
         //esquerda ou direita
         if(transform.position.x < PontoPerseguir.x)
         {
             rig.velocity = new Vector2 (speed, rig.velocity.y);
-            bx.offset = new Vector2(1, 0.05f);
+            bx.offset = new Vector2(0.45f, 0.05f);
             n = 1;
         } else if(transform.position.x > PontoPerseguir.x){
             rig.velocity = new Vector2 (-speed, rig.velocity.y);
-            bx.offset = new Vector2(-1, 0.05f);
+            bx.offset = new Vector2(-0.45f, 0.05f);
             n = -1;
         }
 
