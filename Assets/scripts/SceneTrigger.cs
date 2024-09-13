@@ -12,16 +12,15 @@ public class SceneTrigger : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            StartCoroutine(TeleportPlayer());
+            levelLoader.LoadScene(stt.nextSceneOrCurrentScene);
         }
     }
 
-
-
-    private IEnumerator TeleportPlayer()
+    private void Start()
     {
-        levelLoader.LoadScene(stt.nextSceneOrCurrentScene);
-        yield return new WaitForSeconds(0.5f);
-        player.Teleport(stt.x, stt.y);
+        /*if ()
+        {
+            player.Teleport(stt.x, stt.y);
+        }*/
     }
 }

@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Sala02
   m_EditorClassIdentifier: 
   nextSceneOrCurrentScene: 2
+  x: -15
+  y: 9.401319
+  comingFrom: 0

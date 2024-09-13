@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: SaveRoom
   m_EditorClassIdentifier: 
   nextSceneOrCurrentScene: 3
+  x: 49
+  y: -0.5986773
+  comingFrom: 0

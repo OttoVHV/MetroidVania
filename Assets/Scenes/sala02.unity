@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 794748488}
   - component: {fileID: 794748487}
   - component: {fileID: 794748486}
+  - component: {fileID: 794748493}
   m_Layer: 0
   m_Name: inicio
   m_TagString: Untagged
@@ -417,6 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stt: {fileID: 11400000, guid: 3bf277dc3fba7c744875e5f66318bfbb, type: 2}
   levelLoader: {fileID: 794748486}
+  player: {fileID: 794748493}
 --- !u!483693784 &794748491
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -568,6 +570,28 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &794748493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794748484}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93598d772fe792848a8514408a6ce36a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  maxMana: 100
+  currentMana: 0
+  lastSaveroom: 0
+  dashUnlocked: 0
+  wallWalkUnlocked: 0
+  healthBar: {fileID: 0}
+  manaBar: {fileID: 0}
+  levelLoader: {fileID: 0}
 --- !u!1001 &799360325
 PrefabInstance:
   m_ObjectHideFlags: 0
