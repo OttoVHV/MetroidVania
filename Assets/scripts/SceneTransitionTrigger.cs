@@ -6,4 +6,5 @@ using UnityEngine;
 public class SceneTransitionTrigger : ScriptableObject
 {
     public int nextSceneOrCurrentScene;
+    public float x, y;
 }

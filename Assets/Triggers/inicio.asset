@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: inicio
   m_EditorClassIdentifier: 
   nextSceneOrCurrentScene: 1
+  x: 49
+  y: -0.5986773

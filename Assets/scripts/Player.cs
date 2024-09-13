@@ -28,6 +28,11 @@ public class Player : MonoBehaviour
         manaBar.SetMaxMana(maxMana);
     }
 
+    public void Teleport(float x, float y)
+    {
+        transform.position = new Vector3(x, y, 0);
+    }
+
     // Update is called once per frame
     void Update()
     {

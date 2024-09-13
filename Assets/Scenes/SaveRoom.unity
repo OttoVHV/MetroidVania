@@ -894,6 +894,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stt: {fileID: 11400000, guid: 3bf277dc3fba7c744875e5f66318bfbb, type: 2}
   levelLoader: {fileID: 380570986}
+  player: {fileID: 1109095164}
 --- !u!483693784 &380570991
 TilemapRenderer:
   m_ObjectHideFlags: 0
